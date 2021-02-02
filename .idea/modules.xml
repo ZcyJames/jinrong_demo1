@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/jinrong_api/jinrong_api.iml" filepath="$PROJECT_DIR$/jinrong_api/jinrong_api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jinrong_app/jinrong_app.iml" filepath="$PROJECT_DIR$/jinrong_app/jinrong_app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/jinrong_demo.iml" filepath="$PROJECT_DIR$/.idea/jinrong_demo.iml" />
+    </modules>
+  </component>
+</project>

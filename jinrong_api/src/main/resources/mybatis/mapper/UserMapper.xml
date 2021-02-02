@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chinasoft.jinrong_api.dao.IUserDao">
+    <!-- 写入cache单列标签  表面在此映射中开启mybatis二级缓存-->
+    <cache  eviction="LRU" flushInterval="200000" readOnly="true" size="1024" />
+
+
+    <select id="selectGoodsAll"  resultType="map" useCache="true"  flushCache="false">
+        select
+        tb.GOODS_ID as goodsId,
+        tb.GOODS_NAME as goodsName,
+		tb.GOODS_NUMBER as goodsNumber,
+		tb.GOODS_PRICE as goodsPrice,
+		tb.GOODS_TYPE as goodsType,
+        tb.id as id
+		from tb_goods as tb
+    </select>
+
+    <select id="selectGoodsByWhere" parameterType="String"  resultType="map" useCache="true"  flushCache="false">
+        select * from tb_goods Where GOODS_ID=#{goodsId}
+    </select>
+
+    <insert id="insertGoodsByOne" parameterType="map" flushCache="true">
+        insert into tb_goods value (null,#{goodsName},#{goodsType},#{goodsNumber},#{goodsPrice},#{id});
+    </insert>
+    
+    <delete id="deleteGoodsByName" parameterType="list" flushCache="true">
+        delete from tb_goods
+        <where>
+            <foreach collection="list" item="goodName"
+                     open="GOODS_NAME in(" separator="," close=")">
+                #{goodName}
+            </foreach>
+        </where>
+    </delete>
+
+</mapper>

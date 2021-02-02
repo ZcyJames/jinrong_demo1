@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ssm框架+axios数据异步传输</title>
+</head>
+<body>
+    <div id="app">
+        <table border="1">
+            <thead>
+                <th v-for="title in titles">{{title}}</th>
+            </thead>
+            <tbody>
+                <tr v-for="goods in goodsList">
+                    <td><input type="checkbox"  v-model="check" :value="goods.goodsName"/></td>
+                    <td>{{goods.goodsName}}</td>
+                    <td>{{goods.goodsPrice}}</td>
+                    <td>{{goods.goodsNumber}}</td>
+                    <td>{{goods.goodsType}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <button @click="deleteGood();" :disabled="check.length !== 0?false:'disabled'">批量删除</button>
+        <br><br><br><br>
+        <form>
+            <h4>新增商品出售记录</h4>
+            <label>商品名称:
+                <input type="text" v-model="goodsName">
+            </label><br>
+            <label>商品价格:
+                <input type="text" v-model="goodsPrice">
+            </label><br>
+            <label>商品数量:
+                <input type="text" v-model="goodsNumber">
+            </label><br>
+            <label>商品类型:
+                <input type="text" v-model="goodsType">
+            </label><br>
+            <label>购买人Id(顾客编码):
+                <input type="text" v-model="id">
+            </label><br>
+            <label>{{mssg}}
+            </label><br>
+            <input type="button" value="新增购买信息" @click="submit1();">
+        </form>
+    </div>
+</body>
+<script src="js/vue.js"></script>
+<script src="js/qs.js"></script>
+<script src="js/axios.min.js"></script>
+<script>
+    var app=new Vue({
+        el:"#app",
+        data:{
+            goodsList:'',
+            titles:['全选/取消','名称','单价/kg','数量','类型'],
+            check:[],
+            goodsName:'',
+            goodsPrice:'',
+            goodsNumber:'',
+            goodsType:'',
+            id:'',
+            mssg:''
+        },
+        mounted(){
+            /*输出所有数据*/
+            axios.post('test3',{}).then(function (response) {
+                const data=response.data
+                app.goodsList=data.data
+            })
+        },
+        methods:{
+            deleteGood:function (){
+                const params = new URLSearchParams();
+                params.append("goodsName",this.check)
+                console.log(typeof this.check);
+                axios.post('test4',params).then(function (response) {
+                    var data=response.data
+                })
+            },
+            submit1:function(){
+                axios.post('test5',Qs.stringify({"goodsName":this.goodsName,"goodsPrice":this.goodsPrice
+                    ,"goodsNumber":this.goodsNumber, "goodsType":this.goodsType,"id":this.id}))
+                    .then(function (response){
+                    var data=response.data;
+                    app.mssg=data.message;
+                    app.goodsName="";
+                    app.goodsNumber="";
+                    app.goodsPrice="";
+                    app.goodsType="";
+                    app.id="";
+                    axios.post('test3',{}).then(function (response) {
+                        const data=response.data
+                        app.goodsList=data.data
+                    })
+                });
+
+            }
+        },
+        /*computed:{
+            isAble:function() {
+                return this.check.length !== 0?false:"disabled";
+            }
+        }*/
+    })
+</script>
+</html>
